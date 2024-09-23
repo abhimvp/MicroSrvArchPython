@@ -1,0 +1,35 @@
+# manifests directory contains kubernetes onfigurations
+# configuration for our kubernetes cluster & our service
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: auth
+  labels:
+    app: auth
+
+spec:
+  replicas: 2 # 2 instances of our service
+  selector:
+    matchLabels:
+      app: auth
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 3
+      maxUnavailable: 0
+  template:
+    metadata:
+      labels:
+        app: auth
+    spec:
+      containers:
+        - name: auth
+          image: abhimvp/auth:latest
+          ports:
+            - containerPort: 5000
+          envFrom:
+            - configMapRef:
+                name: auth-configmap
+            - secretRef:
+                name: auth-secret
