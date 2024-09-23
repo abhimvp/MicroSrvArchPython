@@ -1,0 +1,36 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: rabbitmq
+spec:
+  serviceName: "not-applicable"
+  selector:
+    matchLabels:
+      app: rabbitmq
+  template:
+    metadata:
+      labels:
+        app: rabbitmq
+    spec:
+      containers:
+        - name: rabbitmq
+          image: rabbitmq:3-management # we want to have the graphical user interface to manage our queues included in the image
+          ports:
+            - containerPort: 5672
+              name: amqp # advanced message queue protocol - to send messsages to the queue
+              protocol: TCP
+            - containerPort: 15672
+              name: http # to access the GUI
+              protocol: TCP
+          envFrom:
+            - configMapRef:
+                name: rabbitmq-configmap
+            - secretRef:
+                name: rabbitmq-secret
+          volumeMounts:
+            - name: rabbitmq-volume
+              mountPath: "/var/lib/rabbitmq" # path within the container we want mounted
+      volumes:
+        - name: rabbitmq-volume
+          persistentVolumeClaim:
+            claimName: rabbitmq-pvc
