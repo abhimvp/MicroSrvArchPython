@@ -25,4 +25,4 @@ spec:
             - configMapRef:
                 name: converter-configmap
             - secretRef:
-                name: converter-secretpip install --upgrade youtube-dl
+                name: converter-secret

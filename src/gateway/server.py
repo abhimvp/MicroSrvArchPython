@@ -3,8 +3,8 @@ import gridfs , json
 import pika 
 # gridfs allows us to store larger files in mongoDB , 
 # pika is used to interface without queue , we're going to use a rabbitMQ service to store our messages 
-from flask import Flask, request, jsonify
-from flask_pymongo import PyMongo # we will use MongoDb to store our files - mp3 & video
+from flask import Flask
+from flask_pymongo import PyMongo # type: ignore
 from auth import validate
 from auth_svc import access
 from storage import util
